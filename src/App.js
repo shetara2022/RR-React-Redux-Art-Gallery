@@ -1,8 +1,9 @@
 import './App.css';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, connect } from 'react-redux'
+import { useEffect } from 'react';
 import { clearData, incrementID, decrementID, inputID, fetchData } from './features/dataSlice'
 
-function App() {
+function App(props) {
   // your logic goes here!
   const dispatch = useDispatch()
   const data = useSelector((state) => state.data)
@@ -17,6 +18,11 @@ function App() {
       return <p>No Image Found</p>
     }
   }
+
+  useEffect(() => {
+    dispatch(fetchData())
+  }, [props.objectId, dispatch])
+
 
   return (
     <div className="App">
@@ -36,4 +42,9 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => ({
+  objectId: state.data.objectId
+})
+
+
+export default connect(mapStateToProps)(App)
